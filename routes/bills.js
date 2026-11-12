@@ -3,12 +3,16 @@ const Bill = require('../models/Bill');
 const Order = require('../models/Order');
 const httpError = require('./httpError');
 const { releaseTable } = require('./orders');
+const { authenticate, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 const taxRate = () => Number(process.env.TAX_RATE ?? 5);
 const round = (n) => Math.round(n * 100) / 100;
 
 router.get('/settings', (req, res) => res.json({ taxRate: taxRate() }));
+
+// Billing history and bill creation restricted to staff and admin
+router.use(authenticate, authorize('admin', 'staff'));
 
 router.get('/', async (req, res, next) => {
   try {

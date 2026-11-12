@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
-  <title>Spice Route — Restaurant Management System</title>
-  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <title>Spice Route — Restaurant Management & Dining</title>
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -15,7 +15,34 @@
   <!-- Login / Register Screen -->
   <div id="auth-root"></div>
 
-  <!-- Main Application Layout -->
+  <!-- Client Top Navigation Bar (Shown for Clients & Public Visitors) -->
+  <header class="client-header" id="client-header" style="display:none">
+    <div class="client-header-inner">
+      <div class="client-brand" onclick="location.hash='#/client-home'" role="button" tabindex="0">
+        <span class="brand-logo">🌶️</span>
+        <div class="brand-info">
+          <span class="brand-name">Spice Route</span>
+          <span class="brand-sub">Fine Dining & Bar</span>
+        </div>
+      </div>
+      <nav class="client-nav" id="client-nav">
+        <a href="#/client-home" id="cnav-home">Home</a>
+        <a href="#/client-menu" id="cnav-menu">Digital Menu</a>
+        <a href="#/reserve" id="cnav-reserve">Reserve Table</a>
+        <a href="#/my-orders" id="cnav-orders">My Activity</a>
+      </nav>
+      <div class="client-header-right">
+        <a href="#/cart" class="btn-cart" id="header-cart-btn" aria-label="View Cart">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-label">Cart</span>
+          <span class="cart-badge" id="cart-count">0</span>
+        </a>
+        <div id="client-user-slot"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Staff / Admin Sidebar Navigation -->
   <aside class="sidebar" id="sidebar" style="display:none">
     <div class="brand">
       <div class="brand-logo">🌶️</div>
@@ -28,8 +55,10 @@
     <div id="user-profile-slot"></div>
   </aside>
 
+  <!-- Main View Container -->
   <main id="view" tabindex="-1"></main>
 
+  <!-- Modals & Toasts -->
   <div id="modal-root"></div>
   <div id="toast" role="status" aria-live="polite"></div>
 

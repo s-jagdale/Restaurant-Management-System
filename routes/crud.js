@@ -1,8 +1,12 @@
-// Generic CRUD router so every simple module (menu, tables, staff ...) shares the same code.
+// Generic CRUD router so simple modules (staff, customers, inventory) share secure code.
 const express = require('express');
+const { authenticate } = require('../middleware/auth');
 
 module.exports = function crud(Model, opts = {}) {
   const router = express.Router();
+
+  // All CRUD routes require authentication
+  router.use(authenticate);
 
   // If the entire resource is restricted to admin (e.g., Staff management)
   if (opts.adminOnly) {

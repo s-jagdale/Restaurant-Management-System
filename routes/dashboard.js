@@ -5,10 +5,12 @@ const Table = require('../models/Table');
 const Reservation = require('../models/Reservation');
 const Inventory = require('../models/Inventory');
 const MenuItem = require('../models/MenuItem');
+const { authenticate, authorize } = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
+// Dashboard analytics & revenue reports are strictly for Admin
+router.get('/', authenticate, authorize('admin'), async (req, res, next) => {
   try {
     const startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
@@ -21,7 +23,7 @@ router.get('/', async (req, res, next) => {
         Order.countDocuments({ createdAt: { $gte: startOfDay }, status: { $ne: 'cancelled' } }),
         Order.countDocuments({ status: { $nin: ['completed', 'cancelled'] } }),
         Table.find(),
-        Reservation.countDocuments({ date: today, status: { $in: ['booked', 'seated'] } }),
+        Reservation.countDocuments({ date: today, status: { $in: ['booked', 'confirmed', 'seated'] } }),
         Inventory.find({ $expr: { $lte: ['$quantity', '$reorderLevel'] } }).sort({ quantity: 1 }),
         MenuItem.countDocuments(),
         Order.aggregate([
@@ -44,7 +46,9 @@ router.get('/', async (req, res, next) => {
       lowStock,
       topItems,
     });
-  } catch (e) { next(e); }
+  } catch (e) {
+    next(e);
+  }
 });
 
 module.exports = router;
